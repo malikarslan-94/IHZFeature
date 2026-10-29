@@ -1,0 +1,339 @@
+<title>IHZ Admin Features</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: one centered column. A toolbar sits over four collapsible platform cards; each card nests modules, sub-features and plain feature lines. */
+:root{
+  --bg:#F2F6F7;
+  --surface:#FFFFFF;
+  --surface-2:#EAF1F2;
+  --ink:#0D2B33;
+  --muted:#4F6870;
+  --line:#D5E0E3;
+  --accent:#0B6E6A;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#D8EEEC;
+  --warn-soft:#FBEBD3;
+  --warn-ink:#7A4A06;
+  --font-display:'Plus Jakarta Sans',system-ui,sans-serif;
+  --font-body:'Figtree',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1A1F;--surface:#112830;--surface-2:#173540;--ink:#E6F1F3;--muted:#9DB6BD;--line:#244753;
+    --accent:#4FD1C5;--accent-ink:#06211F;--accent-soft:#12403F;--warn-soft:#3A2A0E;--warn-ink:#F2C87D;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1A1F;--surface:#112830;--surface-2:#173540;--ink:#E6F1F3;--muted:#9DB6BD;--line:#244753;
+  --accent:#4FD1C5;--accent-ink:#06211F;--accent-soft:#12403F;--warn-soft:#3A2A0E;--warn-ink:#F2C87D;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:32px 64px;
+}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:65ch;font-size:17px}
+.totals{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.totals b{color:var(--ink);font-weight:700}
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.search{flex:1 1 260px;min-width:0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 14px;min-height:46px}
+.search svg{flex:none;color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;min-height:44px}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+button.ctl{font:inherit;font-weight:600;font-size:14px;min-height:46px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button.ctl:hover{border-color:var(--accent);color:var(--accent)}
+button.ctl.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.ctl.primary:hover{color:var(--accent-ink);filter:brightness(1.06)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+#tree{display:flex;flex-direction:column;gap:14px}
+details{min-width:0}
+summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:12px;min-width:0}
+summary::-webkit-details-marker{display:none}
+.chev{flex:none;width:22px;height:22px;margin-top:2px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:transform .15s ease,background .15s}
+details[open]>summary>.chev{transform:rotate(90deg)}
+summary:hover>.chev{background:var(--surface-2);color:var(--accent)}
+.txt{flex:1;min-width:0}
+.t{display:block;font-weight:600;overflow-wrap:anywhere}
+.d{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.n{flex:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:2px 10px;margin-top:3px;font-variant-numeric:tabular-nums}
+
+/* level 0: platform */
+.l0{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.l0>summary{padding:20px 22px}
+.l0>summary .t{font-family:var(--font-display);font-weight:700;font-size:21px}
+.l0>summary .d{font-size:15px}
+.l0>summary .n{background:var(--accent-soft);color:var(--accent)}
+.l0>.kids{border-top:1px solid var(--line);padding:6px 22px 14px}
+/* level 1: module */
+.l1{border-bottom:1px solid var(--line)}
+.l1:last-child{border-bottom:0}
+.l1>summary{padding:14px 0}
+.l1>summary .t{font-size:17px}
+/* level 2: sub-feature */
+.l2>summary{padding:9px 0}
+.kids .kids{padding:0 0 10px 34px}
+.l2>summary .t{font-weight:500;font-size:15.5px}
+/* leaf lines */
+.leaf{display:flex;gap:10px;padding:5px 0;font-size:15px;color:var(--ink);min-width:0}
+.leaf::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:9px}
+.leaf span{min-width:0;overflow-wrap:anywhere}
+.leaf .d{display:inline;margin:0}
+.row{padding:10px 0 10px 34px}
+.row .t{font-weight:500;font-size:15.5px}
+.leafbox{padding:2px 0 4px 34px}
+
+.l0.out{background:var(--warn-soft);border-color:transparent}
+.l0.out>summary .t{color:var(--warn-ink)}
+.l0.out>summary .n{background:transparent;color:var(--warn-ink)}
+.l0.out>.kids{border-color:rgba(122,74,6,.25)}
+.l0.out .leaf::before{background:var(--warn-ink)}
+
+.hide{display:none}
+.empty{padding:28px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
+mark{background:var(--accent-soft);color:inherit;border-radius:3px;padding:0 2px}
+footer{font-size:13px;color:var(--muted)}
+@media (max-width:520px){
+  .l0>summary{padding:16px}
+  .l0>.kids{padding:4px 16px 12px}
+  .kids .kids{padding-left:24px}
+  .row,.leafbox{padding-left:24px}
+}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Admin portal · Phase 1</div>
+    <h1>IHZ Admin Features</h1>
+    <p class="lede">Everything the IHZ operations team can do in the admin portal. Open a module, then a feature, to see what it includes.</p>
+    <div class="totals" id="totals" aria-live="polite"></div>
+  </header>
+
+  <div class="toolbar">
+    <label class="search" for="q">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search admin features, for example ledger or dispute" autocomplete="off">
+    </label>
+    <button class="ctl primary" id="expand" type="button">Expand all</button>
+    <button class="ctl" id="collapse" type="button">Collapse all</button>
+  </div>
+
+  <main id="tree"></main>
+  <div class="empty hide" id="empty">No feature matches that search.</div>
+
+  <footer>Phase 1 values: PKR 1,500 per visit and PKR 300 platform commission. Items marked to confirm are still open decisions</footer>
+</div>
+
+<script>
+(function(){
+  function n(t,d,c){return {t:t,d:d||"",c:c||null};}
+
+  var DATA=[
+    n("Dashboard","Today's picture at a glance, with shortcuts into the work that needs a person",[
+      n("Needs attention","Five cards, each opening the matching filtered list",["Pending staff verification","Replacements required","Overdue visits","Payment exceptions","Open disputes"]),
+      n("Overview","Live counts for the whole platform",["Customers: total, active, blocked","Staff: total, verified, pending","Visits by status: live, completed, cancelled, awaiting staff selection","Active services"]),
+      n("Visits by status","One bar showing how every visit is split across statuses"),
+      n("Money at a glance","Commission earned and funds reserved, shown apart from top-ups",["Commission earned: PKR 300 per completed visit","Reserved for confirmed visits, not counted as revenue","Link through to Wallets and ledger"]),
+      n("Quick search","One box for booking ID, phone number or name")
+    ]),
+  
+    n("Staff verification","Decide who is allowed to work on the platform",[
+      n("Review queue","Everyone waiting for a decision",["Name, qualification, services offered, submitted date","Oldest first, with search and filters","Opens the staff detail page"]),
+      n("Staff detail and document review","Everything needed to make the decision",["Profile, experience and service capabilities","Identity, professional registration and certificates","Documents open through secure, short-lived links","Previous submissions and rejection reasons"]),
+      n("Approve or reject","Two actions, both recorded",["Approve: staff can now set availability and receive requests","Reject: a written reason is required","Staff is notified of the outcome"]),
+      n("Staff directory","Lists by status",["All staff","Approved","Rejected, with the reason shown","Suspended or blocked, with who did it and why","Rating, completed visits and online state per person"]),
+      n("Suspend, block or unblock","For staff who are already approved",["Reason required and saved in the audit log","New requests stop immediately","Future confirmed visits are flagged for replacement","Visits already in progress are flagged for admin review (to confirm)"])
+    ]),
+  
+    n("Customers and patients","Records and support",[
+      n("Customer list","Search by name or phone",["Name, phone, area, total bookings, status, joined date"]),
+      n("Customer detail","One customer in full",["Profile and contact","Patients and saved addresses","Booking and visit history","Complaints by or against the customer"]),
+      n("Patient profile","Care recipients linked to a customer",["Age, notes and visit history"]),
+      n("Block or unblock","Stop or restore a customer's access",["Reason required","Existing visits are handled separately by an admin","Recorded in the audit log"])
+    ]),
+  
+    n("Bookings and visits","Monitor every request and visit. Admin watches and steps in when needed.",[
+      n("Bookings list","Each booking with its overall status",["Status is built from its visits, for example 2 completed, 1 cancelled, 2 need replacement","Filters: status, date range, service, staff, area","Search by booking ID or phone"]),
+      n("Booking detail","All visits inside one booking",["Visit list with staff, time and status for each","Customer, patient and address","Price and commission agreed for each visit"]),
+      n("Visit list","The working view for operations",["Filtered view for live visits: confirmed, en route, in progress","Filtered view for visits needing attention","Date, staff and area filters"]),
+      n("Visit detail","The full story of one visit",["Status timeline with timestamps","Assignment history, including any replacement","Completion note and actual start and end times","Cancellation record: who, why, when, and the state it was in"]),
+      n("Overdue visits","Visits that should have finished but were not closed in the app",["Flagged automatically","Staff is reminded","Never marked complete without the staff member's action"]),
+      n("Admin actions on a visit","Used for exceptions, not routine approvals",["Cancel a visit with a reason","Flag or place under review","Hold the affected commission while a dispute is open","Contact customer or staff"])
+    ]),
+  
+    n("Replacements","Visits that lost their staff member. The customer chooses the new one.",[
+      n("Replacement queue","Everything waiting for a new staff member",["Visit, customer, service, scheduled time","Original staff and reason","Time since flagged and responses received","Urgency flag when a visit is soon with no responses"]),
+      n("Replacement detail","Full history of one visit",["Original staff and when they withdrew","Held commission released","Responses from new staff, read only","Link to audit events"]),
+      n("Nudge","Prompt the customer to choose, or staff to respond")
+    ]),
+  
+    n("Wallets and ledger","Staff commission funds, fully traceable",[
+      n("Wallets list","One row per staff member",["Balance, reserved and available","Filter by low balance"]),
+      n("Wallet detail","One wallet in full",["Balance, reserved and available explained","Visits currently holding funds","Ledger entries for this staff member"]),
+      n("Ledger explorer","The permanent record",["Top-ups, holds, releases, commission and adjustments","Filter by type, staff, visit and date","Entries are never edited or deleted"]),
+      n("Adjustment entry","Approved corrections only",["Reason and amount required","Added as a new one-time entry","Restricted by permission and written to the audit log"])
+    ]),
+  
+    n("Payment exceptions","Only the staff top-ups that did not settle cleanly. Successful ones credit automatically.",[
+      n("Top-up attempts list","Attempts that need a look",["Staff, provider reference, amount, status, age","Reasons: pending too long, failed, mismatch, duplicate, paid but not credited","Filter by reason, status, date and provider"]),
+      n("Exception detail","What the provider reported against what was expected",["Amount, currency, destination and status compared side by side","Linked ledger entries, if any","Attempt timeline"]),
+      n("Resolve","Three outcomes",["Re-check with the payment provider","Credit once, protected against double credit","Close as failed or invalid, with a reason","Staff is notified and the action is audited"])
+    ]),
+  
+    n("Feedback and disputes","Resolve problems fairly and keep the record",[
+      n("Feedback list","Optional ratings and remarks",["By staff member, visit and date","Scores and written comments"]),
+      n("Disputes list","Complaints from customers and staff",["Category, who raised it, related visit, status","Open, in review, resolved"]),
+      n("Dispute detail","The case in one place",["Visit and completion history","Both sides' details and notes","Cancellation or dispute during service puts the affected commission on hold"]),
+      n("Resolution","What the admin records",["Outcome, reason, time and responsible admin","Any money correction is a separate one-time ledger entry","Completion history is never rewritten","Affected people are notified"])
+    ]),
+  
+    n("Services","The catalogue customers book from",[
+      n("Service list","Name, category, duration and price",["11 active services","PKR 1,500 per visit"]),
+      n("Add or edit a service","Description and status",["Active or inactive switch","Commission per completed visit: PKR 300"]),
+      n("Price and commission snapshot","Each visit keeps the price and commission it was booked at, so later catalogue changes do not rewrite history")
+    ]),
+  
+    n("Reports","Business reporting with clear separation of money types",[
+      n("Commission report","Revenue earned",["PKR 300 per completed visit","Adjustments shown separately"]),
+      n("Visits and demand","By service, area and period"),
+      n("Wallet and top-ups","Kept separate from revenue",["Top-ups, reserved funds and balances"]),
+      n("Staff performance","Completed visits and commission per staff member",["Attributed to the staff who performed the visit"]),
+      n("Export","Download any report as CSV")
+    ]),
+  
+    n("Audit log","Who did what, and when",[
+      n("History list","Searchable and filterable",["Staff approvals and rejections","Blocks and unblocks","Adjustments and dispute resolutions","Service and setting changes"]),
+      n("Event detail","Admin, time, record affected, and what changed")
+    ]),
+  
+    n("Admin users and settings","Access to the portal itself",[
+      n("Sign in","Secure admin login",["Email and password","Reset a forgotten password"]),
+      n("Admin accounts","Add, edit and deactivate team members"),
+      n("Roles and permissions","Different access for different jobs (roles to confirm)",["Example roles: admin, support, finance","Sensitive actions such as adjustments limited by permission"]),
+      n("System settings","Reminders, support contacts and other platform values"),
+      n("My profile","Change own password and details")
+    ]),
+  
+    n("What the admin does not do","Phase 1 rules that keep the platform simple and fair",[
+      n("Choose staff for customers","The customer picks from staff who responded"),
+      n("Routinely approve work","No approval of requests, completed visits or verified top-ups"),
+      n("Pay staff","Customers pay staff directly in cash. IHZ only holds commission funds."),
+      n("Edit the ledger","Mistakes are corrected with a new entry, never by changing an old one")
+    ])
+  ];
+
+  var tree=document.getElementById("tree"),empty=document.getElementById("empty"),qEl=document.getElementById("q");
+  var all=[];
+
+  function count(x){
+    if(typeof x==="string")return 1;
+    if(!x.c||!x.c.length)return 1;
+    return x.c.reduce(function(a,y){return a+count(y);},0);
+  }
+  function mk(tag,cls){var e=document.createElement(tag);if(cls)e.className=cls;return e;}
+  var CHEV='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+
+  function leafLine(text){
+    var d=mk("div","leaf"),s=mk("span");s.textContent=text;d.appendChild(s);
+    return {el:d,txt:text.toLowerCase(),kids:[],raw:text,leaf:true,set:function(q){setMark(s,text,q);}};
+  }
+  function setMark(node,text,q){
+    if(!q){node.textContent=text;return;}
+    var i=text.toLowerCase().indexOf(q);
+    if(i<0){node.textContent=text;return;}
+    node.textContent="";
+    node.appendChild(document.createTextNode(text.slice(0,i)));
+    var m=mk("mark");m.textContent=text.slice(i,i+q.length);node.appendChild(m);
+    node.appendChild(document.createTextNode(text.slice(i+q.length)));
+  }
+
+  function build(x,depth,variant){
+    if(typeof x==="string")return leafLine(x);
+    var hasKids=x.c&&x.c.length;
+    if(!hasKids){
+      var r=mk("div","row"),t=mk("span","t"),dd=mk("span","d");
+      t.textContent=x.t;dd.textContent=x.d;
+      r.appendChild(t);if(x.d)r.appendChild(dd);
+      if(depth===0){r.className="";}
+      return {el:r,txt:(x.t+" "+x.d).toLowerCase(),kids:[],leaf:true,
+        set:function(q){setMark(t,x.t,q);if(x.d)setMark(dd,x.d,q);}};
+    }
+    var det=mk("details","l"+depth+(variant&&depth===0?" "+variant:""));
+    var sum=mk("summary"),chev=mk("span","chev");chev.innerHTML=CHEV;
+    var tx=mk("span","txt"),t2=mk("span","t"),d2=mk("span","d");
+    t2.textContent=x.t;d2.textContent=x.d;
+    tx.appendChild(t2);if(x.d)tx.appendChild(d2);
+    var nn=mk("span","n"),cnt=count(x);
+    nn.textContent=cnt+(cnt===1?" item":" items");
+    sum.appendChild(chev);sum.appendChild(tx);sum.appendChild(nn);
+    det.appendChild(sum);
+    var body=mk("div","kids");
+    var allLeaves=x.c.every(function(c){return typeof c==="string";});
+    if(allLeaves&&depth>=1)body.className="kids leafbox";
+    var kids=x.c.map(function(c){var b=build(c,depth+1);body.appendChild(b.el);return b;});
+    det.appendChild(body);
+    return {el:det,txt:(x.t+" "+x.d).toLowerCase(),kids:kids,det:det,
+      set:function(q){setMark(t2,x.t,q);if(x.d)setMark(d2,x.d,q);}};
+  }
+
+  DATA.forEach(function(x,i){
+    var b=build(x,0,x._v);
+    all.push(b);tree.appendChild(b.el);
+  });
+  // variants for the last two cards
+  tree.children[tree.children.length-1].classList.add("out");
+  all[0].det.open=true;
+
+  var totalFeatures=0,subs=0,mods=DATA.length-1;
+  DATA.slice(0,mods).forEach(function(p){totalFeatures+=count(p);subs+=p.c.length;});
+  document.getElementById("totals").innerHTML="<span><b>"+mods+"</b> modules</span><span><b>"+subs+"</b> sub-features</span><span><b>"+totalFeatures+"</b> features</span>";
+
+  function walk(b,q){
+    var self=q&&b.txt.indexOf(q)>-1;
+    var childHit=false;
+    b.kids.forEach(function(k){if(walk(k,q))childHit=true;});
+    var show=!q||self||childHit;
+    b.el.classList.toggle("hide",!show);
+    b.set(q);
+    if(b.det){
+      if(q&&show&&(childHit||self))b.det.open=true;
+    }
+    // if the parent matched itself, show all its children
+    if(q&&self&&b.kids.length){
+      b.kids.forEach(function(k){showAll(k);});
+    }
+    return show;
+  }
+  function showAll(b){b.el.classList.remove("hide");b.kids.forEach(showAll);}
+
+  var timer;
+  qEl.addEventListener("input",function(){
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      var q=qEl.value.trim().toLowerCase(),any=false;
+      all.forEach(function(b){if(walk(b,q))any=true;});
+      empty.classList.toggle("hide",any||!q);
+    },120);
+  });
+
+  function setAll(open){
+    var q=qEl.value.trim();
+    if(q){qEl.value="";all.forEach(function(b){walk(b,"");});empty.classList.add("hide");}
+    tree.querySelectorAll("details").forEach(function(d){d.open=open;});
+  }
+  document.getElementById("expand").addEventListener("click",function(){setAll(true);});
+  document.getElementById("collapse").addEventListener("click",function(){setAll(false);});
+})();
+</script>

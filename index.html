@@ -63,7 +63,7 @@ summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:1
 summary::-webkit-details-marker{display:none}
 .chev{flex:none;width:22px;height:22px;margin-top:2px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:transform .15s ease,background .15s}
 details[open]>summary>.chev{transform:rotate(90deg)}
-summary:hover>.chev{background:var(--surface-2);color:var(--accent)}
+summary:hover>.chev{background:var(--accent-soft);color:var(--accent)}
 .txt{flex:1;min-width:0}
 .t{display:block;font-weight:600;overflow-wrap:anywhere}
 .d{display:block;color:var(--muted);font-size:14px;margin-top:2px}
@@ -75,15 +75,21 @@ summary:hover>.chev{background:var(--surface-2);color:var(--accent)}
 .l0>summary .t{font-family:var(--font-display);font-weight:700;font-size:21px}
 .l0>summary .d{font-size:15px}
 .l0>summary .n{background:var(--accent-soft);color:var(--accent)}
-.l0>.kids{border-top:1px solid var(--line);padding:6px 22px 14px}
+.l0>.kids{border-top:1px solid var(--line);padding:6px 22px 14px;background:var(--surface-2);border-radius:0 0 13px 13px}
 /* level 1: module */
 .l1{border-bottom:1px solid var(--line)}
 .l1:last-child{border-bottom:0}
 .l1>summary{padding:14px 0}
 .l1>summary .t{font-size:17px}
+.l1>summary .n{background:var(--surface)}
+/* an open module lifts onto its own card with an accent rail */
+.l1[open]{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;margin:8px -12px;padding:0 12px 0 10px}
+.l1[open]>summary .t{color:var(--accent)}
+.l1[open]>summary .n{background:var(--accent-soft);color:var(--accent)}
 /* level 2: sub-feature */
 .l2>summary{padding:9px 0}
 .kids .kids{padding:0 0 10px 34px}
+.l1>.kids{margin-left:10px;padding-left:22px;border-left:2px solid var(--accent-soft)}
 .l2>summary .t{font-weight:500;font-size:15.5px}
 /* leaf lines */
 .leaf{display:flex;gap:10px;padding:5px 0;font-size:15px;color:var(--ink);min-width:0}
@@ -97,7 +103,7 @@ summary:hover>.chev{background:var(--surface-2);color:var(--accent)}
 .l0.out{background:var(--warn-soft);border-color:transparent}
 .l0.out>summary .t{color:var(--warn-ink)}
 .l0.out>summary .n{background:transparent;color:var(--warn-ink)}
-.l0.out>.kids{border-color:rgba(122,74,6,.25)}
+.l0.out>.kids{border-color:rgba(122,74,6,.25);background:transparent}
 .l0.out .leaf::before{background:var(--warn-ink)}
 
 .hide{display:none}
@@ -108,6 +114,7 @@ footer{font-size:13px;color:var(--muted)}
   .l0>summary{padding:16px}
   .l0>.kids{padding:4px 16px 12px}
   .kids .kids{padding-left:24px}
+  .l1>.kids{padding-left:12px}
   .row,.leafbox{padding-left:24px}
 }
 @media (prefers-reduced-motion:reduce){.chev{transition:none}}
